@@ -10,6 +10,9 @@ on:
 permissions:
   contents: read
 
+env:
+  DOCKER_BUILD_RECORD_UPLOAD: false  # only the image itself is attached to a run
+
 jobs:
   test:
     name: Tests
