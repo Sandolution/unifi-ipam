@@ -1,0 +1,16 @@
+{
+ "meta": {
+  "rc": "ok"
+ },
+ "data": [
+  {
+   "version": "10.6.106",
+   "build": "atag_10.6.106_36011",
+   "previous_version": "10.5.67",
+   "hostname": "UDMPro",
+   "udm_version": "UDMPRO.al324.v5.1.33.44ce47b.260909.0025",
+   "ubnt_device_type": "UDMPRO",
+   "console_display_version": "5.1.33"
+  }
+ ]
+}

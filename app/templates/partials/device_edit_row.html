@@ -1,0 +1,30 @@
+{# edit row. Clients: name, fixed IP, DNS name and note go to UniFi, category stays here.
+   UniFi gear: only the DNS name (a record in UniFi's custom DNS records) and category.
+   Enter saves, Escape cancels (app.js) #}
+{% set d = r.device %}
+{% set here = '/vlan/' ~ v.vlan.id ~ ('?zoom=' ~ v.zoom.key if v.zoom else '') %}
+{% set q = 'vlan_id=' ~ v.vlan.id ~ ('&zoom=' ~ v.zoom.key if v.zoom else '') %}
+{% set pfx = v.vlan|prefix %}
+{% set fx = (d.fixed_ip|host_part(v.vlan) if d.fixed_ip in v.vlan.net else d.fixed_ip|string) if d.fixed_ip else '' %}
+<tr id="dev-{{ d.mac|replace(':', '') }}" class="editing {% if d.online %}online{% else %}offline{% endif %}">
+{% if d.gear_model %}
+  <td class="mono nowrap col-ip">{{ r.ip or '—' }}{% if d.fixed_ip %} <span class="hint small" title="Fixed IP {{ d.fixed_ip }} in UniFi">Fixed</span>{% endif %}</td>
+  <td class="nowrap col-device"><input type="hidden" name="vlan_id" value="{{ v.vlan.id }}"><input type="hidden" name="zoom" value="{{ v.zoom.key if v.zoom else '' }}"><span class="dot {% if d.online %}ok{% endif %}" title="{{ 'Online' if d.online else 'Offline' }}"></span><b>{{ d.display_name }}</b>{% if d.gear_model %} <span class="badge badge-unifi" title="UniFi's own device. Its name and address are set in UniFi's device settings.">UniFi</span>{% endif %}</td>
+  <td class="col-dns"><input class="cell-input mono" name="dns_name" value="{{ d.dns_name or '' }}" placeholder="Name.lan (custom DNS)" aria-label="Custom DNS name in UniFi" title="Saved as a record in UniFi's custom DNS records, pointing at {{ r.ip }}." autocomplete="off" spellcheck="false" autofocus></td>
+{% else %}
+  <td class="col-ip nowrap"><span class="addr"><span class="prefix mono">{{ pfx }}</span><input class="mono {% if pfx %}host{% endif %}" name="fixed_ip" value="{{ fx }}" data-orig="{{ fx }}" data-prefix="{{ pfx }}" placeholder="{{ 'none' }}" aria-label="Fixed IP in UniFi" title="Fixed IP in UniFi. Empty means no reservation." autocomplete="off" inputmode="decimal"></span></td>
+  <td class="col-device"><input type="hidden" name="vlan_id" value="{{ v.vlan.id }}"><input type="hidden" name="zoom" value="{{ v.zoom.key if v.zoom else '' }}"><input type="hidden" name="unifi_fields" value="1"><span class="name-edit"><span class="dot {% if d.online %}ok{% endif %}" title="{{ 'Online' if d.online else 'Offline' }}"></span><input class="cell-input" name="name" value="{{ d.name or '' }}" placeholder="{{ d.hostname or 'Name' }}" aria-label="Name in UniFi" autocomplete="off" autofocus></span></td>
+  <td class="col-dns"><input class="cell-input mono" name="dns_name" value="{{ d.dns_name or '' }}" placeholder="{{ 'Name.lan' if d.fixed_ip else 'Needs a fixed IP' }}" aria-label="DNS name in UniFi" title="Local DNS record in UniFi. Needs a fixed IP." autocomplete="off" spellcheck="false"></td>
+{% endif %}
+  <td class="mono hint small col-mac">{{ d.mac }}</td>
+  <td class="hint col-vendor">{% if d.vendor %}<span class="trunc" title="{{ d.vendor }}">{{ d.vendor }}</span>{% elif d.private_mac %}<span class="faint" title="Randomised Wi-Fi address. Phones and laptops use these for privacy; it carries no manufacturer.">Private MAC</span>{% endif %}</td>
+  <td class="col-range{% if r.ip in v.bad_ips %} bad-text{% endif %}">{% if r.ip in v.bad_ips %}Outside {{ d.category }} range{% elif r.range_name %}{{ r.range_name }}{% elif r.ip and v.vlan.dhcp and v.vlan.dhcp[0] <= r.ip and r.ip <= v.vlan.dhcp[1] %}<span class="faint">DHCP pool</span>{% endif %}</td>
+  <td class="col-category"><input class="cell-input{% if r.inherited %} inherited{% endif %}" name="category" list="categories" value="{{ d.category }}" placeholder="{{ r.inherited or 'Category' }}" aria-label="Category" autocomplete="off"></td>
+{% if d.gear_model %}
+  <td class="col-note"><span class="auto" title="Filled in automatically from UniFi">{{ d.gear_model }}</span></td>
+{% else %}
+  <td class="col-note"><input class="cell-input" name="note" value="{{ d.unifi_note or '' }}" placeholder="Note in UniFi" aria-label="Note in UniFi" autocomplete="off"></td>
+{% endif %}
+  <td class="hint num nowrap col-seen" title="{{ d.last_seen|ts }}">{% if d.online %}Online{% else %}{{ d.last_seen|ago }}{% endif %}</td>
+  <td class="actions col-actions"><button class="link save" data-save hx-post="/device/{{ d.mac }}" hx-include="closest tr" hx-target="closest tr" hx-swap="outerHTML">Save</button> · <button class="link" data-cancel hx-get="/device/{{ d.mac }}/row?{{ q }}" hx-target="closest tr" hx-swap="outerHTML">Cancel</button></td>
+</tr>

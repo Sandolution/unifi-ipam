@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% set nav = 'overview' %}
+{% block title %}{{ v.vlan.name }} · UniFi IPAM{% endblock %}
+{% block toasts %}
+{% if saved %}<div class="banner ok">Saved range “{{ saved }}”.</div>{% endif %}
+{% if forgot %}<div class="banner ok">Forgot “{{ forgot }}” in UniFi and removed it here.</div>{% endif %}
+{% if err %}<div class="banner bad">UniFi refused: <code>{{ err }}</code></div>{% endif %}
+{% for e in errors %}<div class="banner bad">{{ e|capfirst }}.</div>{% endfor %}
+{% for w in warnings %}<div class="banner warn">{{ w|capfirst }}.</div>{% endfor %}
+{% endblock %}
+{% block body %}
+<div class="layout">
+
+<aside class="rail">
+  <div class="rail-head"><span class="label">VLANs</span><span class="hint">{{ vlans|length }}</span></div>
+  {% for o in vlans %}
+  <a class="rail-item {% if o.vlan.id == v.vlan.id %}active{% endif %}" href="/vlan/{{ o.vlan.id }}">
+    <span class="rail-name">{{ o.vlan.name }}</span>
+    <span class="mono hint">{% if o.vlan.vlan_tag is not none %}{{ o.vlan.vlan_tag }}{% else %}—{% endif %}</span>
+    <span class="mono rail-subnet">{{ o.vlan.subnet }}</span>
+    <span class="minibar" title="{{ o.util.used }} used · {{ o.util.reserved }} reserved · {{ o.util.free }} free"><span class="used" style="width: {{ o.util.pct(o.util.used) }}%"></span><span class="reserved" style="width: {{ o.util.pct(o.util.reserved) }}%"></span></span>
+  </a>
+  {% endfor %}
+  <div class="rail-foot legend">
+    <span><i class="sw used"></i>Used</span><span><i class="sw reserved"></i>Reserved</span><span><i class="sw free"></i>Free</span>
+  </div>
+</aside>
+
+<main>
+<section class="panel">
+  <div class="panel-head">
+    <h2>{{ v.vlan.name }}</h2>
+    <span class="mono hint">{% if v.vlan.vlan_tag is not none %}VLAN {{ v.vlan.vlan_tag }}{% else %}untagged{% endif %} · {{ v.vlan.subnet }} · gw {{ v.vlan.gateway|short(v.vlan) }}{% if v.vlan.dhcp %} · DHCP {{ v.vlan.dhcp[0]|short(v.vlan) }}–{{ v.vlan.dhcp[1]|short(v.vlan) }}{% endif %}</span>
+    <span class="stats"><b>{{ v.util.used }}</b> Used · <b>{{ v.util.reserved }}</b> Reserved · <b>{{ v.util.free }}</b> Free</span>
+  </div>
+
+
+  {% set base = '/vlan/' ~ v.vlan.id %}
+  <div class="block">
+    {% if v.zoom %}{% set z = v.zoom %}
+    <div class="crumbs">
+      <span class="label">Addresses</span>
+      <a class="mono" href="{{ base }}">{{ v.vlan.subnet }}</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a class="tape {% if z.hue is none %}dhcp{% else %}h{{ z.hue }}{% endif %}" href="{{ base }}" title="Show whole subnet">{{ z.name }} {{ z.start|short(v.vlan) }}–{{ z.end|short(v.vlan) }}</a>
+      <span class="hint">{{ z.size }} addresses · {{ z.used }} in use{% if z.next_free %} · next free <span class="mono ink">{{ z.next_free|short(v.vlan) }}</span>{% elif z.hue is not none %} · full{% endif %}</span>
+      <a class="right zoom-out" href="{{ base }}">Show whole subnet</a>
+    </div>
+    <div class="mini-wrap" aria-hidden="true">
+      <div class="strip mini">{% for c in v.cells %}<i class="c {{ c.kind }}{% if c.hue is not none %} h{{ c.hue }}{% endif %}{% if c.group_start and not loop.first %} grp{% endif %}"></i>{% endfor %}</div>
+      <span class="window" style="{{ z.window_style }}"></span>
+    </div>
+    <div class="zstrip{% if v.zoom_cells|length > 64 %} dense{% endif %}">
+      {% for c in v.zoom_cells %}<span class="z{% if c.kind in ('used', 'used-reserved', 'bad', 'gateway') %} on{% endif %}"><i class="c {{ c.kind }}{% if c.hue is not none %} h{{ c.hue }}{% endif %}" title="{{ c.title }}"{% if c.kind in ('free', 'reserved') %} data-ip="{{ c.ip }}"{% endif %}></i>{% if v.zoom_cells|length <= 64 %}<span class="host">{{ c.ip|short(v.vlan) }}</span>{% endif %}</span>{% endfor %}
+    </div>
+    {% if v.zoom_cells|length > 64 %}<div class="ticks mono hint"><span>{{ z.start|short(v.vlan) }}</span><span>{{ z.end|short(v.vlan) }}</span></div>{% endif %}
+    {% else %}
+    <div class="block-head"><span class="label">Addresses</span><span class="hint">One cell per host · groups of 32 · click a range label to zoom in</span></div>
+    {% if v.cells %}
+    <div class="strip">{% for c in v.cells %}<i class="c {{ c.kind }}{% if c.hue is not none %} h{{ c.hue }}{% endif %}{% if c.group_start and not loop.first %} grp{% endif %}" title="{{ c.title }}"></i>{% endfor %}</div>
+    {% if v.marks %}<div class="marks">{% for m in v.marks %}<a class="mark {% if m.hue is none %}dhcp{% else %}h{{ m.hue }}{% endif %}" href="{{ base }}?zoom={{ m.key }}" style="{{ m.style }}" title="Zoom in on {{ m.name }}"><span>{{ m.name }}</span></a>{% endfor %}</div>{% endif %}
+    <div class="ticks mono hint"><span>{{ v.cells[0].ip|short(v.vlan) }}</span><span>{{ v.cells[-1].ip|short(v.vlan) }}</span></div>
+    {% else %}
+    <p class="hint">Subnet too large for a per-address strip.</p>
+    {% endif %}
+    {% endif %}
+    <div class="legend">
+      {% if v.zoom %}
+      <span><i class="sw used-reserved {% if v.zoom.hue is not none %}h{{ v.zoom.hue }}{% endif %}{% if v.zoom.hue is none %} zused{% endif %}"></i>In use</span>
+      <span><i class="sw free"></i>Free, click to copy</span>
+      <span><i class="sw bad"></i>Outside its category range</span>
+      <span><i class="sw gateway"></i>Gateway</span>
+      {% else %}
+      <span><i class="sw used"></i>Device</span>
+      <span><i class="sw reserved h0"></i>Reserved, free</span>
+      <span><i class="sw used-reserved h0"></i>Reserved, in use</span>
+      <span><i class="sw dhcp"></i>DHCP pool</span>
+      <span><i class="sw bad"></i>Outside its category range</span>
+      <span><i class="sw gateway"></i>Gateway</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="label">Ranges</span></div>
+    <datalist id="categories">{% for c in categories %}<option value="{{ c }}">{% endfor %}</datalist>
+    <form id="rf" method="post" action="{% if editing %}/ranges/{{ editing.id }}{% else %}/vlan/{{ v.vlan.id }}/ranges{% endif %}"></form>
+    <table>
+      <thead><tr><th>Name</th><th>Start</th><th>End</th><th class="num col-size">Size</th><th class="num col-uf">Used / Free</th><th class="col-cat">Category</th><th>Note</th><th class="next">Next free</th><th></th></tr></thead>
+      <tbody>
+      {% if v.vlan.dhcp %}
+        {% set zd = v.zoom and v.zoom.key == 'dhcp' %}
+        <tr class="fixed zoomable{% if zd %} zoomed dhcp-row{% endif %}" data-href="{{ base if zd else base ~ '?zoom=dhcp' }}" title="{{ 'Click to show the whole subnet' if zd else 'Set in UniFi. Click to zoom in.' }}">
+          <td class="name"><i class="sw dhcp"></i><a href="{{ base if zd else base ~ '?zoom=dhcp' }}">DHCP pool</a>{% if zd %}<span class="zoom-tag">Zoomed</span>{% endif %}</td>
+          <td class="mono">{{ v.vlan.dhcp[0] }}</td><td class="mono">{{ v.vlan.dhcp[1] }}</td>
+          <td class="mono num col-size">{{ v.dhcp_size }}</td><td class="mono num col-uf">{{ v.dhcp_stats.used }} <span class="faint">/</span> {{ v.dhcp_stats.free }}</td>
+          <td class="col-cat">Dynamic</td><td class="hint">Leases assigned by the gateway</td>
+          <td class="next"></td>
+          <td class="actions"><span class="faint">From UniFi</span></td>
+        </tr>
+      {% endif %}
+      {% for r in v.ranges %}
+        {% if editing and editing.id == r.id %}
+        <tr class="form-row" data-calc data-prefix="{{ v.vlan|prefix }}" data-first="{{ v.vlan.net.network_address + 1 }}" data-last="{{ v.vlan.net.broadcast_address - 1 }}">
+          <td class="name"><input form="rf" name="name" required aria-label="Name" autocomplete="off" value="{{ form.name if form else r.name }}"></td>
+          <td><span class="addr"><span class="prefix mono">{{ v.vlan|prefix }}</span><input form="rf" name="start_ip" required aria-label="Start" autocomplete="off" class="mono {% if v.vlan|prefix %}host{% endif %}" value="{{ form.start_ip if form else r.start|host_part(v.vlan) }}"></span></td>
+          <td><span class="addr"><span class="prefix mono">{{ v.vlan|prefix }}</span><input form="rf" name="end_ip" required aria-label="End" autocomplete="off" class="mono {% if v.vlan|prefix %}host{% endif %}" value="{{ form.end_ip if form else r.end|host_part(v.vlan) }}"></span></td>
+          <td class="num col-size"><input form="rf" name="size" aria-label="Size" class="mono size" inputmode="numeric" autocomplete="off" value="{{ r.size }}"></td><td class="mono num hint col-uf">{{ v.stats[r.id].used }} / {{ v.stats[r.id].free }}</td>
+          <td class="col-cat"><input form="rf" name="category" list="categories" aria-label="Category" value="{{ form.category if form else r.category }}"></td>
+          <td><input form="rf" name="note" aria-label="Note" value="{{ form.note if form else r.note }}"></td>
+          <td class="next"></td>
+          <td class="actions"><button form="rf" data-busy="Saving…">Save</button> <a href="/vlan/{{ v.vlan.id }}">Cancel</a></td>
+        </tr>
+        {% else %}
+        {% set zr = v.zoom and v.zoom.key == r.id|string %}
+        <tr class="h{{ v.hues[r.id] }} zoomable{% if zr %} zoomed{% endif %}" data-href="{{ base if zr else base ~ '?zoom=' ~ r.id }}">
+          <td class="name"><i class="sw h{{ v.hues[r.id] }}"></i><a href="{{ base if zr else base ~ '?zoom=' ~ r.id }}" title="{{ 'Show whole subnet' if zr else 'Zoom in on ' ~ r.name }}">{{ r.name }}</a>{% if zr %}<span class="zoom-tag">Zoomed</span>{% endif %}</td>
+          <td class="mono">{{ r.start }}</td><td class="mono">{{ r.end }}</td>
+          {% set st = v.stats[r.id] %}
+          <td class="mono num col-size">{{ r.size }}</td><td class="mono num col-uf">{{ st.used }} <span class="faint">/</span> <span class="{% if not st.free %}warn-text{% endif %}">{{ st.free }}</span></td>
+          <td class="col-cat">{{ r.category }}</td><td class="hint">{{ r.note }}</td>
+          <td class="mono next">{% if st.next_free %}<span class="copyable" data-ip="{{ st.next_free }}" title="Click to copy">{{ st.next_free }}</span>{% else %}<span class="warn-text">Full</span>{% endif %}</td>
+          <td class="actions"><a href="/vlan/{{ v.vlan.id }}?edit={{ r.id }}">Edit</a> · <form method="post" action="/ranges/{{ r.id }}/delete" data-busy="Deleting…" onsubmit="return confirm('Delete range {{ r.name }}?')"><button class="link danger">Delete</button></form></td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+      {% if not editing %}
+        <tr class="form-row" data-calc data-prefix="{{ v.vlan|prefix }}" data-first="{{ v.vlan.net.network_address + 1 }}" data-last="{{ v.vlan.net.broadcast_address - 1 }}">
+          <td class="name"><input form="rf" name="name" required aria-label="Name" autocomplete="off" placeholder="New range" value="{{ form.name or '' }}"></td>
+          <td><span class="addr"><span class="prefix mono">{{ v.vlan|prefix }}</span><input form="rf" name="start_ip" required aria-label="Start" autocomplete="off" class="mono {% if v.vlan|prefix %}host{% endif %}" placeholder="{{ v.cells[0].ip|host_part(v.vlan) if v.cells else '' }}" value="{{ form.start_ip or '' }}"></span></td>
+          <td><span class="addr"><span class="prefix mono">{{ v.vlan|prefix }}</span><input form="rf" name="end_ip" required aria-label="End" autocomplete="off" class="mono {% if v.vlan|prefix %}host{% endif %}" placeholder="{{ v.cells[-1].ip|host_part(v.vlan) if v.cells else '' }}" value="{{ form.end_ip or '' }}"></span></td>
+          <td class="num col-size"><input form="rf" name="size" aria-label="Size" class="mono size" inputmode="numeric" autocomplete="off" placeholder="Size"></td><td class="num col-uf"></td>
+          <td class="col-cat"><input form="rf" name="category" list="categories" aria-label="Category" placeholder="E.g. Camera" value="{{ form.category or '' }}"></td>
+          <td><input form="rf" name="note" aria-label="Note" placeholder="Note" value="{{ form.note or '' }}"></td>
+          <td class="next"></td>
+          <td class="actions"><button form="rf" data-busy="Adding…">Add range</button></td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+    <details class="help" data-remember="help-ranges">
+      <summary>How ranges work</summary>
+      <ul class="key" aria-label="How ranges work">
+        <li><span class="k">Addresses</span>Inside {{ v.vlan.net.network_address + 1 }}–{{ v.vlan.net.broadcast_address - 1 }}, with Start before or equal to End</li>
+        <li><span class="k">Overlap</span>Not allowed with another range. Allowed with the DHCP pool, with a warning</li>
+        <li><span class="k">Size</span>Fill any two of Start, End and Size and the third follows</li>
+        <li><span class="k"><i class="sw dhcp"></i>DHCP pool</span>Set in UniFi and changed there</li>
+        <li><span class="k">Zoom</span>Click a row to zoom the strip to it. Click it again to show the whole subnet</li>
+        <li><span class="k">Next free</span>Click the address to copy it</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="block">
+    <div class="block-head">
+      <span class="label">Devices · {{ v.shown|length }}{% if v.zoom %} of {{ v.devices|length }}{% endif %}</span>
+      <span class="head-right">
+        <span class="hint">{% if v.zoom %}Showing devices inside {{ v.zoom.name }} · <a class="zoom-out" href="{{ base }}">Show all</a>{% else %}Sorted by IP, grouped by range · Edit changes name, fixed IP, DNS name and note in UniFi, category here{% endif %}</span>
+        <details class="cols" data-cols-for="devices">
+          <summary>Columns</summary>
+          <div class="menu" role="group" aria-label="Visible columns">
+            {% for key, label in [('dns', 'DNS'), ('mac', 'MAC'), ('vendor', 'Vendor'), ('range', 'Range'), ('category', 'Category'), ('note', 'Note'), ('seen', 'Seen')] %}
+            <label><input type="checkbox" value="{{ key }}" checked> {{ label }}</label>
+            {% endfor %}
+          </div>
+        </details>
+      </span>
+    </div>
+    <table class="devices" id="devices">
+      <thead><tr><th class="col-ip">IP</th><th class="col-device">Device</th><th class="col-dns"><span class="hold-dns">DNS</span></th><th class="col-mac">MAC</th><th class="col-vendor">Vendor</th><th class="col-range">Range</th><th class="col-category"><span class="hold-cat">Category</span></th><th class="col-note">Note</th><th class="num col-seen">Seen</th><th class="col-actions"></th></tr></thead>
+      <tbody>
+      {% for g in groups %}
+        {% if not v.zoom %}
+        <tr class="group {{ g.kind }}{% if g.range %} h{{ g.hue }}{% endif %}">
+          <td colspan="10"><span class="group-name">{% if g.kind == 'range' %}<i class="sw h{{ g.hue }}"></i>{{ g.range.name }}{% elif g.kind == 'dhcp' %}<i class="sw dhcp"></i>DHCP pool{% else %}Not in a range{% endif %}</span>{% if g.start %}<span class="group-meta mono">{{ g.start|short(v.vlan) }}–{{ g.end|short(v.vlan) }}</span><span class="group-meta">{{ g.stats.used }} / {{ g.stats.free }} used / free</span>{% endif %}{% if g.kind == 'dhcp' %}<span class="group-meta">Leases from UniFi</span>{% endif %}</td>
+        </tr>
+        {% endif %}
+        {% for r in g.rows %}{% include "partials/device_row.html" %}{% endfor %}
+      {% else %}<tr><td colspan="10" class="hint">No devices in this {% if v.zoom %}range{% else %}VLAN{% endif %}.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    <details class="help" data-remember="help-devices">
+      <summary>Legend</summary>
+      <ul class="key" aria-label="What the markers mean">
+        <li><span class="k"><span class="dot ok"></span><span class="dot"></span></span>Online, offline</li>
+        <li><span class="k"><span class="hint small">Fixed</span></span>The address is reserved for this device in UniFi</li>
+        <li><span class="k"><span class="k-inherited">Camera</span></span>Grey italic category: taken over from the device's range. Edit the row to override it</li>
+        <li><span class="k"><span class="k-unknown"></span></span>Tinted row: unknown device, with no name in UniFi and no category</li>
+        <li><span class="k"><span class="bad-text small">Outside range</span></span>The device sits outside the range assigned to its category</li>
+        <li><span class="k"><span class="badge badge-unifi">UniFi</span></span>UniFi's own gear, such as switches and access points. Name and address are set in UniFi's device settings; its type is filled in as the note</li>
+        <li><span class="k"><span class="badge badge-dns">custom DNS</span></span>The DNS name of UniFi gear is a record in UniFi's custom DNS records. Clients use their own per-device DNS setting</li>
+        <li><span class="k"><span class="k-forget">Forget</span></span>On offline devices: removes the client from UniFi and from here</li>
+      </ul>
+    </details>
+  </div>
+</section>
+</main>
+</div>
+{% endblock %}

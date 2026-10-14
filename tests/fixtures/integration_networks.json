@@ -1,0 +1,93 @@
+{
+ "offset": 0,
+ "limit": 200,
+ "count": 7,
+ "totalCount": 7,
+ "data": [
+  {
+   "management": "GATEWAY",
+   "id": "4ae2e171-53d1-4142-b9d3-01206d8578b6",
+   "name": "Default",
+   "enabled": true,
+   "vlanId": 1,
+   "metadata": {
+    "origin": "SYSTEM_DEFINED",
+    "configurable": true
+   },
+   "zoneId": "fe995a93-af5f-49d1-8fb9-dd09a572d8a4",
+   "default": true
+  },
+  {
+   "management": "GATEWAY",
+   "id": "42e366f5-53d7-4211-8108-ad6f4639a788",
+   "name": "Core",
+   "enabled": true,
+   "vlanId": 10,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "5b71919d-df8f-42f4-ab5b-1f0724ee4080",
+   "default": false
+  },
+  {
+   "management": "GATEWAY",
+   "id": "13bb3d77-0112-44cb-88bd-eb9ab10c88a2",
+   "name": "Devices",
+   "enabled": true,
+   "vlanId": 20,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "7bd32267-cf2f-4757-a245-6e9874b181d2",
+   "default": false
+  },
+  {
+   "management": "GATEWAY",
+   "id": "9c7bff67-75d4-4a02-a13b-a00c4c9bac80",
+   "name": "IoT",
+   "enabled": true,
+   "vlanId": 30,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "02a2aa07-bbb5-4882-ad2a-c3c7754e9197",
+   "default": false
+  },
+  {
+   "management": "GATEWAY",
+   "id": "29ea85a6-6042-44ca-ace1-e86d7ac9b161",
+   "name": "Video",
+   "enabled": true,
+   "vlanId": 40,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "77c46b2e-3158-4675-8e50-4767e5f71470",
+   "default": false
+  },
+  {
+   "management": "GATEWAY",
+   "id": "799393bb-899a-43ad-be07-e11e13b4d32c",
+   "name": "DMZ",
+   "enabled": true,
+   "vlanId": 255,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "ea94a9ee-1097-4a73-aa16-91e810f4f9d5",
+   "default": false
+  },
+  {
+   "management": "GATEWAY",
+   "id": "54954693-1ee7-42f2-924a-65b9453ce2cf",
+   "name": "Management",
+   "enabled": true,
+   "vlanId": 50,
+   "metadata": {
+    "origin": "USER_DEFINED"
+   },
+   "zoneId": "837828e3-4315-4a8d-9b52-a0697e671c3b",
+   "default": false
+  }
+ ]
+}

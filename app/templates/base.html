@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}UniFi IPAM{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}</script>
+<script src="/static/htmx.min.js" defer></script>
+<script src="/static/app.js" defer></script>
+</head>
+<body{% if no_renew %} data-no-renew{% endif %}>
+<div class="busybar" aria-hidden="true"></div>
+<header class="top">
+  <a class="brand" href="/">
+    <svg class="logo" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+      <circle cx="13" cy="13" r="12.5" class="l-ring"/>
+      <rect x="7" y="6" width="3" height="3" class="l-blue"/><rect x="7" y="10" width="3" height="3" class="l-blue"/><rect x="7" y="14" width="3" height="3" class="l-blue"/>
+      <rect x="16" y="6" width="3" height="3" class="l-amber"/><rect x="16" y="10" width="3" height="3" class="l-amber"/><rect x="16" y="14" width="3" height="3" class="l-amber"/>
+      <rect x="7" y="18" width="12" height="3" rx="1.5" class="l-ink"/>
+    </svg>
+    <span>UniFi <b>IPAM</b></span>
+  </a>
+  <nav>
+    <a href="/" class="{% if nav == 'overview' %}active{% endif %}">Overview</a>
+    <a href="/checks" class="{% if nav == 'checks' %}active{% endif %}">Checks <span class="count{% if check_count %} warn{% endif %}" title="{{ check_count }} findings">{{ check_count }}</span></a>
+  </nav>
+  <div class="sync">
+    {% if sync.last_success %}
+      <span class="dot {% if sync.last_error %}bad{% else %}ok{% endif %}"></span>
+      <span title="{{ sync.last_success|ts }}">Synced {{ sync.last_success|ago }}{% if sync.paused_since %} · <span title="No page was open, so the background sync paused. It resumes when a page is viewed.">paused while idle</span>{% endif %}{% if sync.unifi_version %} · UniFi {{ sync.unifi_version }}{% endif %}</span>
+    {% else %}
+      <span class="dot warn"></span><span>No successful sync yet</span>
+    {% endif %}
+    <form method="post" action="/sync"><button class="ghost">Sync now</button></form>
+    <fieldset class="theme" aria-label="Theme">
+      <label><input type="radio" name="theme" value="light"><span>Light</span></label>
+      <label><input type="radio" name="theme" value="dark"><span>Dark</span></label>
+      <label><input type="radio" name="theme" value="auto"><span>Auto</span></label>
+    </fieldset>
+  </div>
+</header>
+<div class="toasts" id="toasts" role="status" aria-live="polite">
+{% if sync.last_error %}<div class="banner bad">Sync failed at {{ sync.last_attempt|ts }}: <code>{{ sync.last_error }}</code>. Showing data from {{ sync.last_success|ts }}.</div>{% endif %}
+{% block toasts %}{% endblock %}
+</div>
+{% block body %}{% endblock %}
+<script>
+(function(){
+  var cur="auto";try{cur=localStorage.getItem("theme")||"auto"}catch(e){}
+  document.querySelectorAll('input[name="theme"]').forEach(function(r){
+    r.checked=(r.value===cur);
+    r.addEventListener("change",function(){
+      try{localStorage.setItem("theme",r.value)}catch(e){}
+      if(r.value==="auto"){delete document.documentElement.dataset.theme}else{document.documentElement.dataset.theme=r.value}
+    });
+  });
+})();
+</script>
+</body>
+</html>

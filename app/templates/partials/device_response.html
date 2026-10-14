@@ -1,0 +1,2 @@
+{% include row_template %}
+{% if messages %}<div id="toasts" hx-swap-oob="beforeend">{% for kind, text in messages %}<div class="banner {{ kind }}">{{ text|capfirst }}{% if text[-1:] not in '.!?' %}.{% endif %}</div>{% endfor %}</div>{% endif %}

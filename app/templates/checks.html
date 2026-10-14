@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% set nav = 'checks' %}
+{% block title %}Checks · UniFi IPAM{% endblock %}
+{% block toasts %}
+{% if err %}<div class="banner bad">UniFi refused: <code>{{ err }}</code></div>{% endif %}
+{% if forgot %}<div class="banner ok">Forgot “{{ forgot }}” in UniFi and removed it here.</div>{% endif %}
+{% endblock %}
+{% block body %}
+{% macro ignore(kind, subject, anchor) -%}
+{%- set on = report.is_ignored(kind, subject) -%}
+<form method="post" action="/checks/ignore"><input type="hidden" name="kind" value="{{ kind }}"><input type="hidden" name="subject" value="{{ subject }}"><input type="hidden" name="ignore" value="{{ '0' if on else '1' }}"><input type="hidden" name="next" value="/checks#{{ anchor }}"><button class="link" title="{{ 'Count this finding again' if on else 'Keep listed, stop counting it' }}">{{ 'Unignore' if on else 'Ignore' }}</button></form>
+{%- endmacro %}
+{% macro tally(kind, label, cls) -%}
+{%- set active, ign = counts[kind] -%}
+<span class="n {% if active %}{{ cls }}{% endif %}">{{ active }}</span> {{ label }}{% if ign %} <span class="faint">({{ ign }} ignored)</span>{% endif %}
+{%- endmacro %}
+<main class="single">
+
+<div class="summary">
+  <span class="label">Findings</span>
+  <a href="#range">{{ tally('range', "outside their category's range", 'bad-text') }}</a>
+  <a href="#norange">{{ tally('norange', 'not in a range', 'warn-text') }}</a>
+  <a href="#dup">{{ tally('dup', 'address conflicts', 'warn-text') }}</a>
+  <a href="#stale">{{ tally('stale', 'stale reservations', '') }}</a>
+  <span class="hint">Re-evaluated on every page load from the last sync.</span>
+</div>
+
+<section class="panel" id="range">
+  <div class="panel-head"><h2>Outside its category's range</h2><span class="hint">Device has a category, the VLAN has a range for it, the IP is not inside</span></div>
+  {% if report.out_of_range %}
+  <table>
+    <thead><tr><th>VLAN</th><th>IP</th><th>Device</th><th>Category</th><th>Expected</th><th class="num">Seen</th><th></th></tr></thead>
+    <tbody>
+    {% for f in report.out_of_range %}
+      <tr class="{% if report.is_ignored('range', f.device.mac) %}ignored{% endif %}"><td><a href="/vlan/{{ f.vlan.id }}">{{ f.vlan.name }}</a></td><td class="mono">{{ f.ip }}</td><td><b>{{ f.device.display_name }}</b>{% set d = f.device %}{% if d.gear_model %} <span class="badge badge-unifi" title="UniFi's own device. Its name and address are set in UniFi's device settings.">UniFi</span>{% endif %}</td><td>{{ f.device.category }}</td><td class="mono hint">{{ f.detail }}</td><td class="hint num">{% if f.device.online %}Online{% else %}{{ f.device.last_seen|ago }}{% endif %}</td><td class="actions">{{ ignore('range', f.device.mac, 'range') }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="hint pad">None.</p>{% endif %}
+</section>
+
+<section class="panel" id="norange">
+  <div class="panel-head"><h2>Not in a range</h2><span class="hint">Address outside every planned range and the DHCP pool of its VLAN · only addresses a device holds (online or reserved) · VLANs without ranges are skipped</span></div>
+  {% if report.unplanned %}
+  <table>
+    <thead><tr><th>VLAN</th><th>IP</th><th>Device</th><th>Category</th><th class="num">Seen</th><th></th></tr></thead>
+    <tbody>
+    {% for f in report.unplanned %}{% set d = f.device %}
+      <tr class="{% if report.is_ignored('norange', d.mac) %}ignored{% endif %}"><td><a href="/vlan/{{ f.vlan.id }}">{{ f.vlan.name }}</a></td><td class="mono">{{ f.ip }}{% if d.fixed_ip == f.ip %} <span class="hint small">Fixed</span>{% endif %}</td><td><span class="dot {% if d.online %}ok{% endif %}"></span><b>{{ d.display_name }}</b>{% if d.gear_model %} <span class="badge badge-unifi" title="UniFi's own device. Its name and address are set in UniFi's device settings.">UniFi</span>{% endif %}</td><td>{{ d.category }}</td><td class="hint num">{% if d.online %}Online{% else %}{{ d.last_seen|ago }}{% endif %}</td><td class="actions">{{ ignore('norange', d.mac, 'norange') }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="hint pad">None.</p>{% endif %}
+</section>
+
+<section class="panel" id="dup">
+  <div class="panel-head"><h2>Address conflicts</h2><span class="hint">Two devices claiming one address: online on it, or reserved for it · old leases of offline devices are ignored · Forget removes an offline client from UniFi</span></div>
+  {% if report.conflicts %}
+  <table>
+    <thead><tr><th>VLAN</th><th>IP</th><th>Devices</th><th class="num">Seen</th><th></th><th></th></tr></thead>
+    <tbody>
+    {% for g in report.conflicts %}
+      <tr class="{% if report.is_ignored('dup', g.subject) %}ignored{% endif %}">
+        <td><a href="/vlan/{{ g.vlan.id }}">{{ g.vlan.name }}</a></td>
+        <td class="mono">{{ g.ip }}</td>
+        <td>{% for d in g.devices %}<div class="nowrap"><span class="dot {% if d.online %}ok{% endif %}"></span><b>{{ d.display_name }}</b>{% if d.gear_model %} <span class="badge badge-unifi" title="UniFi's own device. Its name and address are set in UniFi's device settings.">UniFi</span>{% endif %} <span class="hint">· {{ d.mac }}{% if d.fixed_ip %} · Fixed {{ d.fixed_ip }}{% endif %}</span></div>{% endfor %}</td>
+        <td class="hint num">{% for d in g.devices %}<div>{% if d.online %}Online{% else %}{{ d.last_seen|ago }}{% endif %}</div>{% endfor %}</td>
+        <td class="actions">{% for d in g.devices %}<div>{% if d.gear_model %}&nbsp;{% elif not d.online %}<form method="post" action="/device/{{ d.mac }}/forget" data-busy="Forgetting…" onsubmit="return confirm('Forget {{ d.display_name|e }} ({{ d.mac }}) in UniFi? This removes its name, note{% if d.fixed_ip %}, the reservation of {{ d.fixed_ip }}{% endif %} and its history there.')"><input type="hidden" name="next" value="/checks#dup"><button class="link danger">Forget in UniFi</button></form>{% else %}<span class="faint">Online</span>{% endif %}</div>{% endfor %}</td>
+        <td class="actions">{{ ignore('dup', g.subject, 'dup') }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="hint pad">None.</p>{% endif %}
+</section>
+
+<section class="panel" id="stale">
+  <div class="panel-head"><h2>Fixed IP, not seen in {{ stale_days }} days</h2><span class="hint">Reserved in UniFi, offline, one row per device · threshold STALE_DAYS · Forget removes the client from UniFi · Ignore keeps it listed but stops counting it</span></div>
+  {% if report.stale_fixed %}
+  <table>
+    <thead><tr><th>VLAN</th><th>Fixed IP</th><th>Device</th><th>MAC</th><th>Vendor</th><th class="num">Last seen</th><th></th></tr></thead>
+    <tbody>
+    {% for f in report.stale_fixed %}
+      <tr class="{% if report.is_ignored('stale', f.device.mac) %}ignored{% endif %}"><td><a href="/vlan/{{ f.vlan.id }}">{{ f.vlan.name }}</a></td><td class="mono">{{ f.ip }}</td><td><b>{{ f.device.display_name }}</b>{% set d = f.device %}{% if d.gear_model %} <span class="badge badge-unifi" title="UniFi's own device. Its name and address are set in UniFi's device settings.">UniFi</span>{% endif %}</td><td class="mono hint small">{{ f.device.mac }}</td><td class="hint">{{ f.device.vendor or '' }}</td><td class="hint num" title="{{ f.device.last_seen|ts }}">{{ f.device.last_seen|ago }}</td>
+      <td class="actions">{% if f.device.gear_model %}{{ ignore('stale', f.device.mac, 'stale') }}{% else %}<form method="post" action="/device/{{ f.device.mac }}/forget" data-busy="Forgetting…" onsubmit="return confirm('Forget {{ f.device.display_name|e }} ({{ f.device.mac }}) in UniFi? This removes its name, note and the reservation of {{ f.ip }}.')"><input type="hidden" name="next" value="/checks#stale"><button class="link danger">Forget in UniFi</button></form> · {{ ignore('stale', f.device.mac, 'stale') }}{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="hint pad">None.</p>{% endif %}
+</section>
+</main>
+{% endblock %}

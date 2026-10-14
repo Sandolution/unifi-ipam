@@ -1,0 +1,522 @@
+{
+ "offset": 0,
+ "limit": 200,
+ "count": 43,
+ "totalCount": 43,
+ "data": [
+  {
+   "type": "WIRELESS",
+   "id": "f69c0539-51c2-3e78-ab08-70426d7df388",
+   "name": "Bed Room Kai | Lighting",
+   "connectedAt": "2026-08-22T09:24:22Z",
+   "ipAddress": "10.1.30.40",
+   "macAddress": "34:ab:95:2c:e2:9a",
+   "uplinkDeviceId": "19e11983-8d7c-3b73-bea9-a1a1f606d6e8",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "310b0486-8aeb-3e93-bbe4-00bc9345d808",
+   "name": "Dining Room | Lighting",
+   "connectedAt": "2026-08-22T09:27:15Z",
+   "ipAddress": "10.1.30.41",
+   "macAddress": "d8:bc:38:e8:e1:9c",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "6c5c1cea-996a-3b0e-8294-487b2252d836",
+   "name": "Utility | Meters",
+   "connectedAt": "2026-08-22T19:34:13Z",
+   "ipAddress": "10.1.30.56",
+   "macAddress": "f4:cf:a2:71:f4:46",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "5654a6b3-9b82-37c4-a9b5-54a2dde29d9a",
+   "name": "Ventilation",
+   "connectedAt": "2026-08-22T19:34:49Z",
+   "ipAddress": "10.1.30.34",
+   "macAddress": "94:3c:c6:a5:f0:ae",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "e1f795a1-48ac-36c6-a811-fe75f9803326",
+   "name": "First Floor | Stairs",
+   "connectedAt": "2026-08-22T19:35:23Z",
+   "ipAddress": "10.1.30.43",
+   "macAddress": "8c:aa:b5:f5:84:8b",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "81b5f30f-f0cc-3fc9-becf-ef29dafd130a",
+   "name": "Second Floor | Stairs",
+   "connectedAt": "2026-08-22T19:35:59Z",
+   "ipAddress": "10.1.30.44",
+   "macAddress": "24:62:ab:bb:c8:ce",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "11941309-2fc7-3f14-8c85-44ed8eb995ca",
+   "name": "lwip0",
+   "connectedAt": "2026-10-09T18:26:25Z",
+   "ipAddress": "10.1.30.234",
+   "macAddress": "e4:ae:e4:c4:cf:17",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "c61a53e6-f84f-3ffa-bdb4-1902f4cda8bf",
+   "name": "Ground Floor | Heating",
+   "connectedAt": "2026-10-10T05:23:32Z",
+   "ipAddress": "10.1.30.33",
+   "macAddress": "fc:b4:67:ca:21:6b",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "b525f9c3-2524-3e41-bd2b-9e90d98e7fd0",
+   "name": "Server Room | Outlets",
+   "connectedAt": "2026-10-10T16:31:50Z",
+   "ipAddress": "10.1.30.59",
+   "macAddress": "d8:f1:5b:6b:6a:b9",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "a8d5c411-c39d-32ed-80a5-55dcfaf07c2e",
+   "name": "First Floor | Robot Vacuum",
+   "connectedAt": "2026-10-11T01:27:02Z",
+   "ipAddress": "10.1.30.38",
+   "macAddress": "50:ec:50:a1:73:8e",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "83807a47-60bd-374b-8a6e-63c09075a083",
+   "name": "Ground Floor | Robot Vacuum",
+   "connectedAt": "2026-10-11T01:55:25Z",
+   "ipAddress": "10.1.30.37",
+   "macAddress": "50:ec:50:95:e2:cf",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "93bd3156-e60e-3d7f-ba9e-95b41f06c81f",
+   "name": "Air Purifier",
+   "connectedAt": "2026-10-11T02:28:57Z",
+   "ipAddress": "10.1.30.36",
+   "macAddress": "c8:93:46:17:70:a4",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "b6cd2bb3-3fb4-31e0-b430-ca8ff4cdae63",
+   "name": "Smartphone Kai",
+   "connectedAt": "2026-10-11T06:30:15Z",
+   "ipAddress": "10.1.20.40",
+   "macAddress": "ac:5f:ea:49:ad:3a",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "0ae63019-383a-38c8-a302-da01177dfe20",
+   "name": "Smartphone Alex Work",
+   "connectedAt": "2026-10-11T08:38:19Z",
+   "ipAddress": "10.1.20.17",
+   "macAddress": "ba:82:3b:ca:a3:82",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "b933ae78-412d-3611-97e7-4fd9d902a3fa",
+   "name": "Smartphone Sam",
+   "connectedAt": "2026-10-11T09:16:36Z",
+   "ipAddress": "10.1.20.24",
+   "macAddress": "94:45:60:84:55:3c",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "39827b8e-040d-3068-9c24-0bde5569b940",
+   "name": "Tablet | Landing",
+   "connectedAt": "2026-10-11T10:27:20Z",
+   "ipAddress": "10.1.30.25",
+   "macAddress": "18:4e:cb:5a:3e:ae",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "cefcd7a7-54b5-3bca-a263-2ac05818bdbe",
+   "name": "Smartphone Alex",
+   "connectedAt": "2026-10-11T10:27:23Z",
+   "ipAddress": "10.1.20.16",
+   "macAddress": "68:4a:e9:d4:e7:2e",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "04f199eb-4462-3cfb-b646-8383ac25b1a3",
+   "name": "Tablet | Dining Room",
+   "connectedAt": "2026-10-11T10:27:23Z",
+   "ipAddress": "10.1.30.24",
+   "macAddress": "18:4e:cb:6b:bd:9c",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "c04f1525-cd6c-3aa0-b51e-323e0dc43b78",
+   "name": "Sonos Beam (Living Room)",
+   "connectedAt": "2026-10-11T10:27:35Z",
+   "ipAddress": "10.1.20.88",
+   "macAddress": "48:a6:b8:94:e1:ad",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "eb4400eb-2c5a-3945-b89c-18715a0ef309",
+   "name": "Boiler",
+   "connectedAt": "2026-10-11T10:27:36Z",
+   "ipAddress": "10.1.30.32",
+   "macAddress": "f4:70:0c:78:e8:40",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "6622b85d-3263-3345-8b78-2e21371e4156",
+   "name": "Utility | Power",
+   "connectedAt": "2026-10-11T10:27:36Z",
+   "ipAddress": "10.1.30.58",
+   "macAddress": "e0:5a:1b:b0:90:ba",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "eabc1133-c74d-32e9-9a45-3f9e7a665154",
+   "name": "Sonos Bookshelf (Living Room - Right)",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.20.90",
+   "macAddress": "80:4a:f2:69:ff:c4",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "d5fdf679-69b2-35b8-8ac2-0379e90d4649",
+   "name": "Camera | Garden",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.40.17",
+   "macAddress": "e4:24:6c:bd:9c:67",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "904b0377-f475-3efe-8c08-6ba1cffc70fc",
+   "name": "Bed Room Kai",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.40.18",
+   "macAddress": "b4:fb:e4:98:d1:c1",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "c2643eb3-d0e3-3e93-a7f2-09da19d32fd7",
+   "name": "Sonos Bookshelf (Kitchen)",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.20.91",
+   "macAddress": "38:42:0b:12:82:eb",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "ec55dd34-aed6-3a7e-b432-1a1b9aae836d",
+   "name": "Zigbee Dongle",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.30.10",
+   "macAddress": "14:2b:2f:0f:9a:cc",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "a8d1e378-af3a-3fd5-afb5-b1f6627824f6",
+   "name": "Printer (Brother)",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.20.104",
+   "macAddress": "b4:22:00:73:dc:5c",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "6eb8b4e3-4805-31bb-a919-530d62ff5fb1",
+   "name": "CloudKey+",
+   "connectedAt": "2026-10-11T10:27:37Z",
+   "ipAddress": "10.1.10.40",
+   "macAddress": "e0:63:da:03:40:39",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "cc39458d-1b65-3aa3-a945-4820c364b4da",
+   "name": "Camera | Driveway",
+   "connectedAt": "2026-10-11T10:27:38Z",
+   "ipAddress": "10.1.40.16",
+   "macAddress": "e4:24:6c:71:6b:b3",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "3c079d6b-9952-3399-aa45-5c6e1028d17f",
+   "name": "Sonos Bookshelf (Living Room - Left)",
+   "connectedAt": "2026-10-11T10:27:39Z",
+   "ipAddress": "10.1.20.89",
+   "macAddress": "38:42:0b:17:3f:7e",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "0379b687-c583-35f3-a8b3-52fcdd7647ee",
+   "name": "Solar | Inverter",
+   "connectedAt": "2026-10-11T10:27:48Z",
+   "ipAddress": "10.1.30.57",
+   "macAddress": "84:d6:c5:0b:99:5f",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "0d165b34-cffd-3e45-b186-45f96b7b9143",
+   "name": "Cronus",
+   "connectedAt": "2026-10-11T10:27:55Z",
+   "macAddress": "58:47:ca:88:5a:df",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "5d86221c-4d56-3982-8a5e-931c772e3d13",
+   "name": "Hestia",
+   "connectedAt": "2026-10-11T10:28:09Z",
+   "ipAddress": "10.1.30.8",
+   "macAddress": "bc:24:11:7a:63:4d",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "b8f4042b-3e12-373b-8f1a-8fdd1f4d6015",
+   "name": "Apollo",
+   "connectedAt": "2026-10-11T10:28:09Z",
+   "ipAddress": "10.1.20.8",
+   "macAddress": "bc:24:11:f8:b7:f3",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "e390b143-a119-3519-bc60-f2fc958f5a49",
+   "name": "Argus",
+   "connectedAt": "2026-10-11T10:28:10Z",
+   "ipAddress": "10.1.40.8",
+   "macAddress": "bc:24:11:62:da:7a",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "b0162688-31a8-3f49-960b-3bf035d104b2",
+   "name": "Athena",
+   "connectedAt": "2026-10-11T10:28:10Z",
+   "ipAddress": "10.1.50.8",
+   "macAddress": "bc:24:11:c8:49:dd",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "b2ed9e04-67a0-37f6-9955-e3aad3618ef3",
+   "name": "Hermes",
+   "connectedAt": "2026-10-11T10:28:10Z",
+   "ipAddress": "10.1.255.8",
+   "macAddress": "bc:24:11:72:6d:d1",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "47861f07-e47c-32ef-a451-f0118e66ded2",
+   "name": "Pallas",
+   "connectedAt": "2026-10-11T10:28:10Z",
+   "ipAddress": "10.1.10.8",
+   "macAddress": "bc:24:11:e0:98:e4",
+   "uplinkDeviceId": "e0248c57-2857-3267-bd14-8570c4559b4c",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "1df7dd04-35a4-359b-ae50-335f77e53827",
+   "name": "Laptop Alex",
+   "connectedAt": "2026-10-11T10:28:34Z",
+   "ipAddress": "10.1.20.48",
+   "macAddress": "78:af:08:01:f2:d8",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "d4e6d0dd-2747-3983-be24-f9d23dd35066",
+   "name": "NAS",
+   "connectedAt": "2026-10-11T10:30:05Z",
+   "ipAddress": "10.1.10.12",
+   "macAddress": "24:5e:be:3e:2c:a5",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "86c70015-fd2f-3f32-8a9e-62484fedaae4",
+   "name": "Desktop Alex (Dev)",
+   "connectedAt": "2026-10-11T10:38:07Z",
+   "ipAddress": "10.1.20.54",
+   "macAddress": "c8:d3:ff:71:3f:7e",
+   "uplinkDeviceId": "c6b58fd7-1c93-37aa-acc4-15356ae0b0eb",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRED",
+   "id": "8ba109be-905b-3b40-b1ee-d9b29402f3e8",
+   "name": "bc:24:11:4d:20:5d",
+   "connectedAt": "2026-10-11T10:42:39Z",
+   "macAddress": "bc:24:11:4d:20:5d",
+   "uplinkDeviceId": "0c2a8e75-2a16-301b-8b0c-c49c36abfe3b",
+   "access": {
+    "type": "DEFAULT"
+   }
+  },
+  {
+   "type": "WIRELESS",
+   "id": "daa5211f-2e19-3e24-b16d-447db1ffeeba",
+   "name": "IoT | Air Conditioner",
+   "connectedAt": "2026-10-11T10:48:36Z",
+   "ipAddress": "10.1.30.35",
+   "macAddress": "a0:43:b0:4d:60:2d",
+   "uplinkDeviceId": "6992d947-045f-3d7f-a205-3f983afc1af1",
+   "access": {
+    "type": "DEFAULT"
+   }
+  }
+ ]
+}
