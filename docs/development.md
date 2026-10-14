@@ -35,6 +35,17 @@ The Python tests never contact a controller. They run against recorded, anonymiz
 a simulated page in Node 18 or newer, without any packages. They cover the Start/End/Size
 calculation, row-click zoom, banners, busy states, save-and-reload, and refresh on return.
 
+## Continuous integration
+
+`.github/workflows/build.yml` runs on every push to `main`, on pull requests and on demand:
+
+1. Lint, the Python tests and the browser-side checks.
+2. Build the Docker image and start it once, checking that it serves its first page.
+3. Attach the image to the run as a compressed download (`unifi-ipam-image-<commit>`), kept 30 days.
+4. On `main` and on `v*` tags, publish it to `ghcr.io/sandolution/unifi-ipam` for amd64 and
+   arm64. It is tagged `latest`, `sha-<commit>`, and for a tag such as `v1.2.3` also `1.2.3` and
+   `1.2`. Pull requests are built and tested but not published.
+
 ## Code layout
 
 | File | What it holds |

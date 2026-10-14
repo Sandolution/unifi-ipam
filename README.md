@@ -1,5 +1,7 @@
 # UniFi IPAM
 
+[![Build](https://github.com/Sandolution/unifi-ipam/actions/workflows/build.yml/badge.svg)](https://github.com/Sandolution/unifi-ipam/actions/workflows/build.yml)
+
 A small, self-hosted IP address planner for networks routed by a UniFi gateway. It shows every
 VLAN as one page: an address strip with one cell per host, the ranges you plan ("cameras get
 .16–.31"), and every device UniFi knows about, grouped by range. UniFi stays the source of
@@ -48,6 +50,24 @@ docker compose up -d --build
 ```
 
 Open `http://<host>:8000`. The first sync runs at startup and takes about a second.
+
+### Prebuilt image
+
+Every commit to `main` is tested and published to the GitHub container registry, for 64-bit
+Intel/AMD and ARM:
+
+```sh
+docker run -d --name unifi-ipam --restart unless-stopped -p 8000:8000 \
+  -e UNIFI_URL=https://192.168.1.1 -e UNIFI_API_KEY=... -e VERIFY_TLS=false \
+  -v unifi-ipam-data:/data ghcr.io/sandolution/unifi-ipam:latest
+```
+
+To use it with Compose, replace `build: .` in `docker-compose.yml` with
+`image: ghcr.io/sandolution/unifi-ipam:latest`.
+
+Each build run on the [Actions](https://github.com/Sandolution/unifi-ipam/actions) page also
+offers the image as a download, kept for 30 days. Load it with
+`gunzip -c unifi-ipam.tar.gz | docker load`.
 
 Then select a VLAN in the left rail and add your first range in the last row of the Ranges
 table.
